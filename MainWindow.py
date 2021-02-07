@@ -1,5 +1,5 @@
 import os.path
-from  PyQt5 import  QtCore, QtWidgets, QtMultimedia
+from PyQt5 import  QtCore, QtWidgets, QtMultimedia
 from P2T2SMain import Ui_MainWindow
 from AddWindow import  AddWindow
 from AppController import  AppController
@@ -70,8 +70,10 @@ class MainWindow(QtWidgets.QMainWindow):
         conditions_str = " ".join(self.conditions_list)
         question_str = f"Questions for {self.selected_condition} are - {empty_str.join(self.selected_questions)}"
         audio_string = f"Topic is {self.topic_to_study.get_topic()}... Associations are - {conditions_str}.{question_str}."
-        audio_gtts = gTTS(audio_string, lang="en-ng")
+
+        audio_gtts = gTTS(audio_string)
         audio_gtts.save(self.audio_file)
+
 
     def does_audio_exist(self):
 
@@ -95,24 +97,28 @@ class MainWindow(QtWidgets.QMainWindow):
     def read_questions(self):
         if not self.has_internet():
             self.show_message_box(QtWidgets.QMessageBox.Information,"No internet connection")
+
             return
         if self.selected_condition is None or self.selected_questions is None:
+
             return
 
         if self.does_audio_exist():
             self.play()
         else:
+
             self.prepare_audios()
             self.play()
 
     def has_internet(self):
-        url='http://www.google.com/'
+        url = 'http://www.google.com/'
         try:
             r = requests.head(url, timeout=3)
             return True
 
         except requests.ConnectionError as ex:
             return False
+
 
     def show_message_box(self,icon, msg):
 
